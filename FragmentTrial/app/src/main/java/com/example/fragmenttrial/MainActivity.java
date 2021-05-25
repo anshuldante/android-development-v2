@@ -17,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
                     .setReorderingAllowed(true)
                     .add(R.id.fragment_container_view, FirstFragment.class, bundle)
                     .commit();
+            
         }
     }
 }

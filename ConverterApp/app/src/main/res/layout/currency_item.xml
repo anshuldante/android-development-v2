@@ -3,64 +3,54 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/selectedFlagImage"
+        android:id="@+id/flagImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/flag_aud" />
 
     <TextView
-        android:id="@+id/selectedCurrencyName"
+        android:id="@+id/currencyName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginBottom="4dp"
         android:text="USD"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/selectedFlagImage" />
+        app:layout_constraintTop_toBottomOf="@+id/flagImage" />
 
     <TextView
-        android:id="@+id/selectedCurrencyAmount"
+        android:id="@+id/currencyAmount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="4dp"
         android:text="111"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/selectedCurrencySymbol"
+        android:id="@+id/currencySymbol"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="4dp"
         android:text="$"
-        app:layout_constraintEnd_toStartOf="@+id/selectedCurrencyAmount"
+        app:layout_constraintEnd_toStartOf="@+id/currencyAmount"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/selectedCurrencyLongName"
+        android:id="@+id/currencyLongName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="4dp"
         android:text="US Dollar"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/selectedCurrencyAmount" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/currency_converter_recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:scrollbars="vertical"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/selectedCurrencyName" />
+        app:layout_constraintTop_toBottomOf="@+id/currencyAmount" />
 </androidx.constraintlayout.widget.ConstraintLayout>
