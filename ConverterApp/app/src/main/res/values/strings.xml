@@ -1,8 +1,70 @@
 <resources>
     <string name="app_name">Converter App</string>
+    <string name="settings">Settings</string>
+
+    <!--  Decimal Places  -->
+    <string-array name="decimal_places">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+    </string-array>
+
+    <!--  Default selected currencies  -->
+
+    <string-array name="default_selected_currencies">
+        <item>EUR</item>
+        <item>USD</item>
+        <item>INR</item>
+        <item>AUD</item>
+        <item>GBP</item>
+        <item>CAD</item>
+        <item>RUB</item>
+    </string-array>
+
+    <!--  Currency Array  -->
+    <string-array name="currencies">
+        <item>EUR</item>
+        <item>USD</item>
+        <item>JPY</item>
+        <item>BGN</item>
+        <item>CZK</item>
+        <item>DKK</item>
+        <item>GBP</item>
+        <item>HUF</item>
+        <item>PLN</item>
+        <item>RON</item>
+        <item>SEK</item>
+        <item>CHF</item>
+        <item>NOK</item>
+        <item>HRK</item>
+        <item>RUB</item>
+        <item>TRY</item>
+        <item>AUD</item>
+        <item>BRL</item>
+        <item>CAD</item>
+        <item>CNY</item>
+        <item>HKD</item>
+        <item>IDR</item>
+        <item>ILS</item>
+        <item>INR</item>
+        <item>ISK</item>
+        <item>KRW</item>
+        <item>MXN</item>
+        <item>MYR</item>
+        <item>NZD</item>
+        <item>PHP</item>
+        <item>SGD</item>
+        <item>THB</item>
+        <item>ZAR</item>
+        <item>EXT</item>
+    </string-array>
+
 
     <!--  UI Field names  -->
-
     <string name="currency_name">Name</string>
     <string name="currency_flag">Flag</string>
     <string name="currency_amount">Amount</string>

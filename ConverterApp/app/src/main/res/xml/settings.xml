@@ -1,4 +1,27 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <ListPreference
+        android:defaultValue="USD"
+        android:entries="@array/currencies"
+        android:entryValues="@array/currencies"
+        android:key="default_currency_preference"
+        android:title="Default Currency"
+        app:useSimpleSummaryProvider="true" />
+
+    <ListPreference
+        android:defaultValue="1"
+        android:entries="@array/decimal_places"
+        android:entryValues="@array/decimal_places"
+        android:key="decimal_places_preference"
+        android:title="Decimal Places"
+        app:useSimpleSummaryProvider="true" />
+    <MultiSelectListPreference
+        android:defaultValue="@array/default_selected_currencies"
+        android:entries="@array/currencies"
+        android:entryValues="@array/currencies"
+        android:key="selected_currencies_preference"
+        android:title="Selected Currencies"
+        app:useSimpleSummaryProvider="true" />
+
 </PreferenceScreen>
