@@ -7,60 +7,65 @@
     tools:context=".MainActivity">
 
     <ImageView
-        android:id="@+id/selectedFlagImage"
+        android:id="@+id/primaryFlagImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:contentDescription="@string/currency_flag"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/flag_aud" />
 
     <TextView
-        android:id="@+id/selectedCurrencyName"
+        android:id="@+id/primaryCurrencyName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:text="USD"
+        android:hint="@string/currency_name"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/selectedFlagImage" />
+        app:layout_constraintTop_toBottomOf="@+id/primaryFlagImage" />
 
-    <TextView
-        android:id="@+id/selectedCurrencyAmount"
+    <EditText
+        android:id="@+id/primaryCurrencyAmount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:text="111"
+        android:autofillHints="The amount to be converted"
+        android:hint="@string/currency_amount"
+        android:inputType="numberDecimal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/selectedCurrencySymbol"
+        android:id="@+id/primaryCurrencySymbol"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="$"
-        app:layout_constraintEnd_toStartOf="@+id/selectedCurrencyAmount"
+        android:hint="@string/currency_symbol"
+        app:layout_constraintEnd_toStartOf="@+id/primaryCurrencyAmount"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/selectedCurrencyLongName"
+        android:id="@+id/primaryCurrencyLongName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:text="US Dollar"
+        android:hint="@string/currency_long_name"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/selectedCurrencyAmount" />
+        app:layout_constraintTop_toBottomOf="@+id/primaryCurrencyAmount" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/currency_converter_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
         android:layout_marginTop="12dp"
+        android:layout_marginEnd="12dp"
         android:scrollbars="vertical"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/selectedCurrencyName" />
+        app:layout_constraintTop_toBottomOf="@+id/primaryCurrencyName" />
 </androidx.constraintlayout.widget.ConstraintLayout>

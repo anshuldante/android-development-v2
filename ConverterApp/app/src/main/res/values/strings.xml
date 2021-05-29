@@ -1,6 +1,16 @@
 <resources>
     <string name="app_name">Converter App</string>
 
+    <!--  UI Field names  -->
+
+    <string name="currency_name">Currency Name</string>
+    <string name="currency_flag">Currency Flag</string>
+    <string name="currency_amount">Currency Amount</string>
+    <string name="currency_symbol">Currency Symbol</string>
+    <string name="currency_long_name">Currency Long Name</string>
+
+    <!--  Currency Conversion Rates URL (updated once per day)  -->
+    <string name="ebc_daily_url">https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml</string>
 
     <!--  Currency Long Names  -->
     <string name="long_aud">Australian dollar</string>
