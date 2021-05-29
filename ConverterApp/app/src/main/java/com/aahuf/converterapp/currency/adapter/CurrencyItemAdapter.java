@@ -1,4 +1,4 @@
-package com.example.converterapp.currency.adapter;
+package com.aahuf.converterapp.currency.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,18 +9,19 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.converterapp.R;
-import com.example.converterapp.currency.model.CurrencyModel;
+import com.aahuf.converterapp.currency.model.CurrencyModel;
+import com.aahuf.converterapp.R;
 
 import java.util.List;
 
 public class CurrencyItemAdapter extends RecyclerView.Adapter<CurrencyItemAdapter.CurrencyItemViewHolder> {
-    private List<CurrencyModel> dataset;
+    private final List<CurrencyModel> dataset;
 
     public CurrencyItemAdapter(List<CurrencyModel> dataset) {
         this.dataset = dataset;
     }
 
+    @NonNull
     @Override
     public CurrencyItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new CurrencyItemViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.currency_item, parent, false));
@@ -42,11 +43,11 @@ public class CurrencyItemAdapter extends RecyclerView.Adapter<CurrencyItemAdapte
 
     public static class CurrencyItemViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView flagImage;
-        private TextView currencyName;
-        private TextView currencyLongName;
-        private TextView currencySymbol;
-        private TextView currencyAmount;
+        private final ImageView flagImage;
+        private final TextView currencyName;
+        private final TextView currencyLongName;
+        private final TextView currencySymbol;
+        private final TextView currencyAmount;
 
         public CurrencyItemViewHolder(View itemView) {
             super(itemView);

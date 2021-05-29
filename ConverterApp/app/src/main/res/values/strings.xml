@@ -3,11 +3,11 @@
 
     <!--  UI Field names  -->
 
-    <string name="currency_name">Currency Name</string>
-    <string name="currency_flag">Currency Flag</string>
-    <string name="currency_amount">Currency Amount</string>
-    <string name="currency_symbol">Currency Symbol</string>
-    <string name="currency_long_name">Currency Long Name</string>
+    <string name="currency_name">Name</string>
+    <string name="currency_flag">Flag</string>
+    <string name="currency_amount">Amount</string>
+    <string name="currency_symbol">Symbol</string>
+    <string name="currency_long_name">Long Name</string>
 
     <!--  Currency Conversion Rates URL (updated once per day)  -->
     <string name="ebc_daily_url">https://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml</string>

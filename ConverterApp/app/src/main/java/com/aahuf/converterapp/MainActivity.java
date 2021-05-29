@@ -1,13 +1,14 @@
-package com.example.converterapp;
+package com.aahuf.converterapp;
 
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.converterapp.currency.adapter.CurrencyItemAdapter;
-import com.example.converterapp.currency.data.CurrencyData;
-import com.example.converterapp.currency.model.ConversionRatesModel;
+import com.aahuf.converterapp.currency.adapter.CurrencyItemAdapter;
+import com.aahuf.converterapp.currency.data.CurrencyData;
+import com.aahuf.converterapp.currency.model.ConversionRatesModel;
+import com.aahuf.converterapp.R;
 
 public class MainActivity extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package com.example.converterapp;
+package com.aahuf.converterapp;
 
 import org.junit.Test;
 

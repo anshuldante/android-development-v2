@@ -1,9 +1,12 @@
-package com.example.converterapp.currency.data;
+package com.aahuf.converterapp.currency.data;
 
 import android.content.Context;
 import android.util.Log;
 import android.util.Xml;
 
+import com.aahuf.converterapp.currency.CurrencyConstants;
+import com.aahuf.converterapp.currency.model.ConversionRatesModel;
+import com.aahuf.converterapp.currency.model.CurrencyModel;
 import com.android.volley.Cache;
 import com.android.volley.Network;
 import com.android.volley.Request;
@@ -12,9 +15,7 @@ import com.android.volley.toolbox.BasicNetwork;
 import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.StringRequest;
-import com.example.converterapp.R;
-import com.example.converterapp.currency.model.ConversionRatesModel;
-import com.example.converterapp.currency.model.CurrencyModel;
+import com.aahuf.converterapp.R;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
@@ -26,11 +27,6 @@ import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.example.converterapp.currency.CurrencyConstants.CURRENCY_FLAGS;
-import static com.example.converterapp.currency.CurrencyConstants.CURRENCY_LONGNAMES;
-import static com.example.converterapp.currency.CurrencyConstants.CURRENCY_NAMES;
-import static com.example.converterapp.currency.CurrencyConstants.CURRENCY_SYMBOLS;
 
 public class CurrencyData {
 
@@ -59,15 +55,15 @@ public class CurrencyData {
 
         private CurrencyModelFactory() {
             models = new ArrayList<>();
-            int length = CURRENCY_FLAGS.length;
+            int length = CurrencyConstants.CURRENCY_FLAGS.length;
             CurrencyModel currencyModel;
 
             for (int i = 0; i < length; i++) {
                 currencyModel = new CurrencyModel();
-                currencyModel.setCurrencyName(CURRENCY_NAMES[i]);
-                currencyModel.setCurrencyLongName(CURRENCY_LONGNAMES[i]);
-                currencyModel.setCurrencySymbol(CURRENCY_SYMBOLS[i]);
-                currencyModel.setFlagImage(CURRENCY_FLAGS[i]);
+                currencyModel.setCurrencyName(CurrencyConstants.CURRENCY_NAMES[i]);
+                currencyModel.setCurrencyLongName(CurrencyConstants.CURRENCY_LONG_NAMES[i]);
+                currencyModel.setCurrencySymbol(CurrencyConstants.CURRENCY_SYMBOLS[i]);
+                currencyModel.setFlagImage(CurrencyConstants.CURRENCY_FLAGS[i]);
                 currencyModel.setCurrencyAmount(0.0);
 
                 models.add(currencyModel);
@@ -98,7 +94,7 @@ public class CurrencyData {
             } catch (Exception e) {
                 Log.e("Currency Data Error", "exception while fetching conversion rates {}", e);
             }
-            Log.i("Happy Tag", "conversion rates pulled: " + conversionRatesModel.toString());
+            Log.i("Happy Tag", "conversion rates pulled at: " + conversionRatesModel.getUpdatedDate() + " with values: " + conversionRatesModel.getConversionRates());
         }
 
         private RequestQueue getRequestQueue() {

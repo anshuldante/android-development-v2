@@ -1,4 +1,4 @@
-package com.example.converterapp;
+package com.aahuf.converterapp;
 
 import android.content.Context;
 
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
     public void useAppContext() {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        assertEquals("com.example.converterapp", appContext.getPackageName());
+        assertEquals("com.aahuf.converterapp", appContext.getPackageName());
     }
 }

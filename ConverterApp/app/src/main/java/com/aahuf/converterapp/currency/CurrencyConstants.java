@@ -1,7 +1,7 @@
-package com.example.converterapp.currency;
+package com.aahuf.converterapp.currency;
 
 
-import com.example.converterapp.R;
+import com.aahuf.converterapp.R;
 
 public class CurrencyConstants {
     public static final String[] CURRENCY_NAMES =
@@ -30,7 +30,7 @@ public class CurrencyConstants {
                     "S", ""
             };
 
-    public static final Integer[] CURRENCY_LONGNAMES =
+    public static final Integer[] CURRENCY_LONG_NAMES =
             {
                     R.string.long_eur, R.string.long_usd, R.string.long_jpy,
                     R.string.long_bgn, R.string.long_czk, R.string.long_dkk,

@@ -1,4 +1,4 @@
-package com.example.converterapp.currency.model;
+package com.aahuf.converterapp.currency.model;
 
 public class CurrencyModel {
 
