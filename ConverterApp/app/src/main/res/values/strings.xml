@@ -14,6 +14,7 @@
     </string-array>
 
     <!--  Default selected currencies  -->
+    <string name="default_primary_currency">INR</string>
 
     <string-array name="default_selected_currencies">
         <item>EUR</item>

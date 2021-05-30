@@ -33,7 +33,7 @@ public class CurrencyItemAdapter extends RecyclerView.Adapter<CurrencyItemAdapte
         holder.currencyName.setText(dataset.get(position).getCurrencyName());
         holder.currencyLongName.setText(dataset.get(position).getCurrencyLongName());
         holder.currencySymbol.setText(dataset.get(position).getCurrencySymbol());
-        holder.currencyAmount.setText(Double.toString(dataset.get(position).getCurrencyAmount()));
+        holder.currencyAmount.setText(dataset.get(position).getCurrencyAmount().toString());
     }
 
     @Override

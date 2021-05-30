@@ -4,8 +4,8 @@ import android.content.Context;
 import android.util.Log;
 import android.util.Xml;
 
+import com.aahuf.converterapp.R;
 import com.aahuf.converterapp.currency.CurrencyConstants;
-import com.aahuf.converterapp.currency.model.ConversionRatesModel;
 import com.aahuf.converterapp.currency.model.CurrencyModel;
 import com.android.volley.Cache;
 import com.android.volley.Network;
@@ -15,7 +15,6 @@ import com.android.volley.toolbox.BasicNetwork;
 import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.StringRequest;
-import com.aahuf.converterapp.R;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
@@ -24,38 +23,37 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.math.BigDecimal;
 import java.math.MathContext;
-import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.function.Consumer;
 
-public class CurrencyData {
+public class CurrencyMasterData {
 
     private final CurrencyModelFactory currencyModelFactory;
-    private final ConversionRatesTask conversionRatesTask;
+    private final MathContext mathContext;
     private RequestQueue requestQueue;
+    private final Consumer<BigDecimal> consumer;
     private final Context context;
+    private String updatedDate;
 
-    public CurrencyData(Context context) {
+    public CurrencyMasterData(Context context, Consumer<BigDecimal> consumer, MathContext mathContext) {
         this.context = context;
+        this.consumer = consumer;
+        this.mathContext = mathContext;
         currencyModelFactory = new CurrencyModelFactory();
-        conversionRatesTask = new ConversionRatesTask();
     }
 
-    public List<CurrencyModel> getCurrencyModels() {
-        return currencyModelFactory.models;
+    public Map<String, CurrencyModel> getCurrencyModelMap() {
+        return currencyModelFactory.currencyModelMap;
     }
 
-    public ConversionRatesModel getConversionRates() {
-        return conversionRatesTask.conversionRatesModel;
-    }
-
-
-    private static class CurrencyModelFactory {
-        private final List<CurrencyModel> models;
+    private class CurrencyModelFactory {
+        private final Map<String, CurrencyModel> currencyModelMap;
 
         private CurrencyModelFactory() {
-            models = new ArrayList<>();
             int length = CurrencyConstants.CURRENCY_FLAGS.length;
+            currencyModelMap = new HashMap<>(length, 1);
             CurrencyModel currencyModel;
 
             for (int i = 0; i < length; i++) {
@@ -64,22 +62,21 @@ public class CurrencyData {
                 currencyModel.setCurrencyLongName(CurrencyConstants.CURRENCY_LONG_NAMES[i]);
                 currencyModel.setCurrencySymbol(CurrencyConstants.CURRENCY_SYMBOLS[i]);
                 currencyModel.setFlagImage(CurrencyConstants.CURRENCY_FLAGS[i]);
-                currencyModel.setCurrencyAmount(0.0);
-
-                models.add(currencyModel);
+                currencyModel.setCurrencyAmount(new BigDecimal("1.0", mathContext));
+                currencyModel.setCurrencyRate(new BigDecimal("1.0", mathContext));
+                currencyModelMap.put(CurrencyConstants.CURRENCY_NAMES[i], currencyModel);
             }
+            new ConversionRatesTask();
         }
     }
 
     private class ConversionRatesTask {
 
-        private ConversionRatesModel conversionRatesModel;
-
         private ConversionRatesTask() {
-            buildConversionRatesModel();
+            populateConversionRates();
         }
 
-        private void buildConversionRatesModel() {
+        private void populateConversionRates() {
             StringRequest stringRequest = new StringRequest(Request.Method.GET, context.getResources().getString(R.string.ebc_daily_url),
                     this::parseResponse, error ->
                     Log.e("Currency Data Error", "exception while parsing conversion rates {}", error));
@@ -87,14 +84,14 @@ public class CurrencyData {
         }
 
         private void parseResponse(String response) {
-            conversionRatesModel = new ConversionRatesModel();
             try {
-                Handler handler = new Handler(conversionRatesModel);
+                Handler handler = new Handler();
                 Xml.parse(new ByteArrayInputStream(response.getBytes()), Xml.Encoding.UTF_8, handler);
+                consumer.accept(new BigDecimal("1.0", mathContext));
             } catch (Exception e) {
                 Log.e("Currency Data Error", "exception while fetching conversion rates {}", e);
             }
-            Log.i("Happy Tag", "conversion rates pulled at: " + conversionRatesModel.getUpdatedDate() + " with values: " + conversionRatesModel.getConversionRates());
+            Log.e("Currency Data Error", "conversion rates pulled at: " + updatedDate + " with values: " + getCurrencyModelMap().values().stream().map(CurrencyModel::getCurrencyRate));
         }
 
         private RequestQueue getRequestQueue() {
@@ -108,12 +105,8 @@ public class CurrencyData {
         }
     }
 
-    private static class Handler extends DefaultHandler {
-        private final MathContext MATH_CONTEXT = new MathContext(4, RoundingMode.CEILING);
-        private final ConversionRatesModel model;
-
-        private Handler(ConversionRatesModel model) {
-            this.model = model;
+    private class Handler extends DefaultHandler {
+        private Handler() {
         }
 
         // Start element
@@ -127,7 +120,7 @@ public class CurrencyData {
                 for (int i = 0; i < attributes.getLength(); i++) {
                     switch (attributes.getLocalName(i)) {
                         case "time":
-                            model.setUpdatedDate(attributes.getValue(i));
+                            updatedDate = attributes.getValue(i);
                             break;
 
                         case "currency":
@@ -140,7 +133,7 @@ public class CurrencyData {
                             } catch (Exception e) {
                                 rate = 1.0;
                             }
-                            model.getConversionRates().put(name, new BigDecimal(rate, MATH_CONTEXT));
+                            Objects.requireNonNull(getCurrencyModelMap().get(name)).setCurrencyRate(new BigDecimal(rate, mathContext));
                             break;
                     }
                 }

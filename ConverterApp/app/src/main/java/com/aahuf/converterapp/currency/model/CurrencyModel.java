@@ -1,18 +1,21 @@
 package com.aahuf.converterapp.currency.model;
 
+import java.math.BigDecimal;
+
 public class CurrencyModel {
 
-    private Integer flagImage;
+    private int flagImage;
     private String currencyName;
-    private Integer currencyLongName;
-    private Double currencyAmount;
+    private int currencyLongName;
     private String currencySymbol;
+    private BigDecimal currencyRate;
+    private BigDecimal currencyAmount;
 
-    public Integer getFlagImage() {
+    public int getFlagImage() {
         return flagImage;
     }
 
-    public void setFlagImage(Integer flagImage) {
+    public void setFlagImage(int flagImage) {
         this.flagImage = flagImage;
     }
 
@@ -24,19 +27,19 @@ public class CurrencyModel {
         this.currencyName = currencyName;
     }
 
-    public Integer getCurrencyLongName() {
+    public int getCurrencyLongName() {
         return currencyLongName;
     }
 
-    public void setCurrencyLongName(Integer currencyLongName) {
+    public void setCurrencyLongName(int currencyLongName) {
         this.currencyLongName = currencyLongName;
     }
 
-    public Double getCurrencyAmount() {
+    public BigDecimal getCurrencyAmount() {
         return currencyAmount;
     }
 
-    public void setCurrencyAmount(Double currencyAmount) {
+    public void setCurrencyAmount(BigDecimal currencyAmount) {
         this.currencyAmount = currencyAmount;
     }
 
@@ -46,5 +49,13 @@ public class CurrencyModel {
 
     public void setCurrencySymbol(String currencySymbol) {
         this.currencySymbol = currencySymbol;
+    }
+
+    public BigDecimal getCurrencyRate() {
+        return currencyRate;
+    }
+
+    public void setCurrencyRate(BigDecimal currencyRate) {
+        this.currencyRate = currencyRate;
     }
 }
