@@ -4,6 +4,11 @@ package com.aahuf.converterapp.currency;
 import com.aahuf.converterapp.R;
 
 public class CurrencyConstants {
+
+    public static final String DEFAULT_CURRENCY_PREFERENCE = "default_currency_preference";
+    public static final String SELECTED_CURRENCIES_PREFERENCE = "selected_currencies_preference";
+    public static final String DECIMAL_PLACES_PREFERENCE = "decimal_places_preference";
+
     public static final String[] CURRENCY_NAMES =
             {
                     "EUR", "USD", "JPY", "BGN",

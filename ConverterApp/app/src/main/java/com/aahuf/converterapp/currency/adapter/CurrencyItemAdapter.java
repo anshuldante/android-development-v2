@@ -9,8 +9,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.aahuf.converterapp.currency.model.CurrencyModel;
 import com.aahuf.converterapp.R;
+import com.aahuf.converterapp.currency.model.CurrencyModel;
 
 import java.util.List;
 
@@ -24,7 +24,8 @@ public class CurrencyItemAdapter extends RecyclerView.Adapter<CurrencyItemAdapte
     @NonNull
     @Override
     public CurrencyItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new CurrencyItemViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.currency_item, parent, false));
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.currency_item, parent, false);
+        return new CurrencyItemViewHolder(view);
     }
 
     @Override

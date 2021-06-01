@@ -19,10 +19,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.aahuf.converterapp.currency.adapter.CurrencyItemAdapter;
 import com.aahuf.converterapp.currency.data.CurrencyMasterData;
 import com.aahuf.converterapp.currency.listener.AmountTextChangeWatcher;
+import com.aahuf.converterapp.currency.listener.CurrencyPreferenceChangeListener;
 import com.aahuf.converterapp.currency.model.CurrencyModel;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -31,25 +31,25 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.aahuf.converterapp.currency.CurrencyConstants.DECIMAL_PLACES_PREFERENCE;
+import static com.aahuf.converterapp.currency.CurrencyConstants.DEFAULT_CURRENCY_PREFERENCE;
+import static com.aahuf.converterapp.currency.CurrencyConstants.SELECTED_CURRENCIES_PREFERENCE;
+
 public class MainActivity extends AppCompatActivity {
+    private CurrencyPreferenceChangeListener preferenceChangeListener;
     private List<CurrencyModel> selectedCurrencies;
     private CurrencyMasterData currencyMasterData;
-    CurrencyItemAdapter currencyItemAdapter;
+    private CurrencyItemAdapter currencyItemAdapter;
     private SharedPreferences preferences;
     private CurrencyModel primaryCurrency;
-    private MathContext mathContext;
-
-    private ImageView currencyImage;
-    private EditText currencyAmount;
-    private TextView currencySymbol;
-    private TextView currencyName;
-    private TextView currencyLongName;
+    private int scale;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        preferenceChangeListener = new CurrencyPreferenceChangeListener(this::initCurrencyViews);
 
         initCurrencyViews();
     }
@@ -71,23 +71,31 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
     private void initCurrencyViews() {
+
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        preferences.registerOnSharedPreferenceChangeListener(preferenceChangeListener);
+
         initCurrencyMasterData();
         initCurrencyModels();
         initCurrencyUiComponents();
-
-        attachChangeListeners();
-    }
-
-    private void attachChangeListeners() {
-        currencyAmount.addTextChangedListener(new AmountTextChangeWatcher(this::updateAmountsAndViews, mathContext));
     }
 
     private void initCurrencyModels() {
         Set<String> defaultCurrencies = new HashSet<>(Arrays.asList(getResources().getStringArray(R.array.default_selected_currencies)));
-        String defaultPrimaryCurrency = preferences.getString("default_currency_preference", getResources().getString(R.string.default_primary_currency));
+        String defaultPrimaryCurrency = preferences.getString(DEFAULT_CURRENCY_PREFERENCE, getResources().getString(R.string.default_primary_currency));
 
-        final Set<String> currencies = preferences.getStringSet("selected_currencies_preference", defaultCurrencies);
+        final Set<String> currencies = preferences.getStringSet(SELECTED_CURRENCIES_PREFERENCE, defaultCurrencies);
         primaryCurrency = currencyMasterData.getCurrencyModelMap().get(defaultPrimaryCurrency);
 
         selectedCurrencies = currencyMasterData.getCurrencyModelMap().entrySet().stream()
@@ -96,19 +104,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initCurrencyMasterData() {
-        int decimalPlaces = getDecimalPlaces();
-        mathContext = new MathContext(decimalPlaces, RoundingMode.HALF_UP);
-
-        currencyMasterData = getCurrencyData();
+        scale = getDecimalPlaces();
+        currencyMasterData = new CurrencyMasterData(this, this::updateAmountsAndViews, scale);
     }
 
     private void initCurrencyUiComponents() {
 
-        currencyImage = findViewById(R.id.primaryFlagImage);
-        currencyAmount = findViewById(R.id.primaryCurrencyAmount);
-        currencySymbol = findViewById(R.id.primaryCurrencySymbol);
-        currencyName = findViewById(R.id.primaryCurrencyName);
-        currencyLongName = findViewById(R.id.primaryCurrencyLongName);
+        ImageView currencyImage = findViewById(R.id.primaryFlagImage);
+        TextView currencySymbol = findViewById(R.id.primaryCurrencySymbol);
+        TextView currencyName = findViewById(R.id.primaryCurrencyName);
+        TextView currencyLongName = findViewById(R.id.primaryCurrencyLongName);
+
+        EditText currencyAmount = findViewById(R.id.primaryCurrencyAmount);
+        currencyAmount.addTextChangedListener(new AmountTextChangeWatcher(this::updateAmountsAndViews, scale));
 
         currencyImage.setImageResource(primaryCurrency.getFlagImage());
         currencyAmount.setText(primaryCurrency.getCurrencyAmount().toString());
@@ -122,17 +130,11 @@ public class MainActivity extends AppCompatActivity {
         currencyRecyclerView.setAdapter(currencyItemAdapter);
     }
 
-    private CurrencyMasterData getCurrencyData() {
-        if (currencyMasterData == null) {
-            currencyMasterData = new CurrencyMasterData(this, this::updateAmountsAndViews, mathContext);
-        }
-        return currencyMasterData;
-    }
-
     private BigDecimal getConvertedAmount(CurrencyModel currencyModel) {
         BigDecimal amount = null;
         try {
-            amount = primaryCurrency.getCurrencyAmount().multiply(currencyModel.getCurrencyRate(), mathContext).divide(primaryCurrency.getCurrencyRate(), mathContext);
+            amount = primaryCurrency.getCurrencyAmount().multiply(currencyModel.getCurrencyRate()).setScale(scale, RoundingMode.HALF_UP)
+                    .divide(primaryCurrency.getCurrencyRate(), RoundingMode.HALF_UP).setScale(scale, RoundingMode.HALF_UP);
         } catch (Exception e) {
             Log.e("Unknown Error: ", "Exception while calculating currency amount", e);
         }
@@ -140,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private int getDecimalPlaces() {
-        String decimalPreferenceValue = preferences.getString("decimal_places_preference", "3");
+        String decimalPreferenceValue = preferences.getString(DECIMAL_PLACES_PREFERENCE, "3");
         try {
             return Integer.parseInt(decimalPreferenceValue);
         } catch (NumberFormatException e) {

@@ -22,7 +22,7 @@ import org.xml.sax.helpers.DefaultHandler;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.math.BigDecimal;
-import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -31,16 +31,16 @@ import java.util.function.Consumer;
 public class CurrencyMasterData {
 
     private final CurrencyModelFactory currencyModelFactory;
-    private final MathContext mathContext;
-    private RequestQueue requestQueue;
     private final Consumer<BigDecimal> consumer;
+    private RequestQueue requestQueue;
     private final Context context;
     private String updatedDate;
+    private final int scale;
 
-    public CurrencyMasterData(Context context, Consumer<BigDecimal> consumer, MathContext mathContext) {
+    public CurrencyMasterData(Context context, Consumer<BigDecimal> consumer, int scale) {
         this.context = context;
         this.consumer = consumer;
-        this.mathContext = mathContext;
+        this.scale = scale;
         currencyModelFactory = new CurrencyModelFactory();
     }
 
@@ -62,8 +62,8 @@ public class CurrencyMasterData {
                 currencyModel.setCurrencyLongName(CurrencyConstants.CURRENCY_LONG_NAMES[i]);
                 currencyModel.setCurrencySymbol(CurrencyConstants.CURRENCY_SYMBOLS[i]);
                 currencyModel.setFlagImage(CurrencyConstants.CURRENCY_FLAGS[i]);
-                currencyModel.setCurrencyAmount(new BigDecimal("1.0", mathContext));
-                currencyModel.setCurrencyRate(new BigDecimal("1.0", mathContext));
+                currencyModel.setCurrencyAmount(new BigDecimal("1.0").setScale(scale, RoundingMode.HALF_UP));
+                currencyModel.setCurrencyRate(new BigDecimal("1.0").setScale(scale, RoundingMode.HALF_UP));
                 currencyModelMap.put(CurrencyConstants.CURRENCY_NAMES[i], currencyModel);
             }
             new ConversionRatesTask();
@@ -87,7 +87,7 @@ public class CurrencyMasterData {
             try {
                 Handler handler = new Handler();
                 Xml.parse(new ByteArrayInputStream(response.getBytes()), Xml.Encoding.UTF_8, handler);
-                consumer.accept(new BigDecimal("1.0", mathContext));
+                consumer.accept(new BigDecimal("1.0").setScale(scale, RoundingMode.HALF_UP));
             } catch (Exception e) {
                 Log.e("Currency Data Error", "exception while fetching conversion rates {}", e);
             }
@@ -133,7 +133,7 @@ public class CurrencyMasterData {
                             } catch (Exception e) {
                                 rate = 1.0;
                             }
-                            Objects.requireNonNull(getCurrencyModelMap().get(name)).setCurrencyRate(new BigDecimal(rate, mathContext));
+                            Objects.requireNonNull(getCurrencyModelMap().get(name)).setCurrencyRate(new BigDecimal(rate).setScale(scale, RoundingMode.HALF_UP));
                             break;
                     }
                 }
