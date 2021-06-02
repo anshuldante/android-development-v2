@@ -31,15 +31,15 @@ import java.util.function.Consumer;
 public class CurrencyMasterData {
 
     private final CurrencyModelFactory currencyModelFactory;
-    private final Consumer<BigDecimal> consumer;
+    private final Runnable runnable;
     private RequestQueue requestQueue;
     private final Context context;
     private String updatedDate;
     private final int scale;
 
-    public CurrencyMasterData(Context context, Consumer<BigDecimal> consumer, int scale) {
+    public CurrencyMasterData(Context context, Runnable runnable, int scale) {
         this.context = context;
-        this.consumer = consumer;
+        this.runnable = runnable;
         this.scale = scale;
         currencyModelFactory = new CurrencyModelFactory();
     }
@@ -85,13 +85,12 @@ public class CurrencyMasterData {
 
         private void parseResponse(String response) {
             try {
-                Handler handler = new Handler();
-                Xml.parse(new ByteArrayInputStream(response.getBytes()), Xml.Encoding.UTF_8, handler);
-                consumer.accept(new BigDecimal("1.0").setScale(scale, RoundingMode.HALF_UP));
+                Xml.parse(new ByteArrayInputStream(response.getBytes()), Xml.Encoding.UTF_8, new Handler());
+                runnable.run();
             } catch (Exception e) {
                 Log.e("Currency Data Error", "exception while fetching conversion rates {}", e);
             }
-            Log.e("Currency Data Error", "conversion rates pulled at: " + updatedDate + " with values: " + getCurrencyModelMap().values().stream().map(CurrencyModel::getCurrencyRate));
+            Log.i("Currency Data Update: ", "conversion rates pulled at: " + updatedDate + " with values: " + getCurrencyModelMap().values().stream().map(CurrencyModel::getCurrencyRate));
         }
 
         private RequestQueue getRequestQueue() {

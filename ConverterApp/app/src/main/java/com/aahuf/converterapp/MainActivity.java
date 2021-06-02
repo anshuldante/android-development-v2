@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private CurrencyItemAdapter currencyItemAdapter;
     private SharedPreferences preferences;
     private CurrencyModel primaryCurrency;
+    private BigDecimal amount;
     private int scale;
 
     @Override
@@ -50,6 +51,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         preferenceChangeListener = new CurrencyPreferenceChangeListener(this::initCurrencyViews);
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        preferences.registerOnSharedPreferenceChangeListener(preferenceChangeListener);
+        scale = getDecimalPlaces();
+        amount = BigDecimal.ONE.setScale(scale, RoundingMode.HALF_UP);
 
         initCurrencyViews();
     }
@@ -74,19 +79,23 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        preferences.unregisterOnSharedPreferenceChangeListener(preferenceChangeListener);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        preferences.registerOnSharedPreferenceChangeListener(preferenceChangeListener);
+    }
+
+    private void changeDefaultCurrencyAndUpdateViews(int position) {
+        PreferenceManager.getDefaultSharedPreferences(this).edit().putString(DEFAULT_CURRENCY_PREFERENCE, selectedCurrencies.get(position).getCurrencyName()).apply();
+        initCurrencyViews();
     }
 
     private void initCurrencyViews() {
+        currencyMasterData = new CurrencyMasterData(this, this::updateAmountsAndViews, scale);
 
-        preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        preferences.registerOnSharedPreferenceChangeListener(preferenceChangeListener);
-
-        initCurrencyMasterData();
         initCurrencyModels();
         initCurrencyUiComponents();
     }
@@ -98,14 +107,13 @@ public class MainActivity extends AppCompatActivity {
         final Set<String> currencies = preferences.getStringSet(SELECTED_CURRENCIES_PREFERENCE, defaultCurrencies);
         primaryCurrency = currencyMasterData.getCurrencyModelMap().get(defaultPrimaryCurrency);
 
+        if (primaryCurrency != null) {
+            primaryCurrency.setCurrencyAmount(amount);
+        }
+
         selectedCurrencies = currencyMasterData.getCurrencyModelMap().entrySet().stream()
                 .filter(entry -> !entry.getKey().equals(defaultPrimaryCurrency)).filter(entry -> currencies.contains(entry.getKey()))
                 .map(Map.Entry::getValue).collect(Collectors.toList());
-    }
-
-    private void initCurrencyMasterData() {
-        scale = getDecimalPlaces();
-        currencyMasterData = new CurrencyMasterData(this, this::updateAmountsAndViews, scale);
     }
 
     private void initCurrencyUiComponents() {
@@ -124,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
         currencyName.setText(primaryCurrency.getCurrencyName());
         currencyLongName.setText(primaryCurrency.getCurrencyLongName());
 
-        currencyItemAdapter = new CurrencyItemAdapter(selectedCurrencies);
+        currencyItemAdapter = new CurrencyItemAdapter(selectedCurrencies, this::changeDefaultCurrencyAndUpdateViews);
 
         RecyclerView currencyRecyclerView = findViewById(R.id.currency_converter_recycler_view);
         currencyRecyclerView.setAdapter(currencyItemAdapter);
@@ -152,11 +160,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateAmountsAndViews(BigDecimal amount) {
-        Log.i("Callback reached: ", "method callback to update view reached");
-
+        this.amount = amount;
         primaryCurrency.setCurrencyAmount(amount);
         currencyMasterData.getCurrencyModelMap().values().forEach(currencyModel -> currencyModel.setCurrencyAmount(getConvertedAmount(currencyModel)));
 
-        currencyItemAdapter.notifyDataSetChanged();
+        if (currencyItemAdapter != null) {
+            currencyItemAdapter.notifyDataSetChanged();
+        }
+    }
+
+    private void updateAmountsAndViews() {
+        currencyMasterData.getCurrencyModelMap().values().forEach(currencyModel -> currencyModel.setCurrencyAmount(getConvertedAmount(currencyModel)));
+
+        if (currencyItemAdapter != null) {
+            currencyItemAdapter.notifyDataSetChanged();
+        }
     }
 }
