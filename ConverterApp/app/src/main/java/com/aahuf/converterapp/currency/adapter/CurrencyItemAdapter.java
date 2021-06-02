@@ -10,22 +10,28 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.aahuf.converterapp.R;
+import com.aahuf.converterapp.currency.listener.CurrencyItemOnClickListener;
 import com.aahuf.converterapp.currency.model.CurrencyModel;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 public class CurrencyItemAdapter extends RecyclerView.Adapter<CurrencyItemAdapter.CurrencyItemViewHolder> {
     private final List<CurrencyModel> dataset;
+    private final Consumer<Integer> consumer;
 
-    public CurrencyItemAdapter(List<CurrencyModel> dataset) {
+    public CurrencyItemAdapter(List<CurrencyModel> dataset, Consumer<Integer> consumer) {
         this.dataset = dataset;
+        this.consumer = consumer;
     }
 
     @NonNull
     @Override
     public CurrencyItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.currency_item, parent, false);
-        return new CurrencyItemViewHolder(view);
+        CurrencyItemViewHolder currencyItemViewHolder = new CurrencyItemViewHolder(view);
+        view.setOnClickListener(new CurrencyItemOnClickListener(currencyItemViewHolder, consumer));
+        return currencyItemViewHolder;
     }
 
     @Override
