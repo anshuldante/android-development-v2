@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context=".AddReminderActivity">
 
     <TimePicker
@@ -28,7 +28,7 @@
         android:id="@+id/ara_iv_calendar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_margin="12dp"
         android:contentDescription="@string/ara_select_date_description"
         android:src="@drawable/calendar_icon"
         app:layout_constraintEnd_toEndOf="parent"
@@ -62,7 +62,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:visibility="visible"
+        android:visibility="invisible"
         app:layout_constraintTop_toBottomOf="@+id/ara_sc_recurring_reminder">
 
         <TextView
@@ -71,7 +71,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:text="@string/ara_label_every"
-            app:layout_constraintBottom_toTopOf="@id/ara_tv_start_date"
+            app:layout_constraintBottom_toTopOf="@id/ara_hz_divider"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -83,7 +83,7 @@
             android:autofillHints="1,2,3,4"
             android:hint="@string/ara_repetition_delay"
             android:inputType="number"
-            app:layout_constraintBottom_toTopOf="@id/ara_tv_start_date"
+            app:layout_constraintBottom_toTopOf="@id/ara_hz_divider"
             app:layout_constraintEnd_toStartOf="@+id/ara_sn_recurrence_type"
             app:layout_constraintStart_toEndOf="@id/ara_tv_every"
             app:layout_constraintTop_toTopOf="parent" />
@@ -94,9 +94,18 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:autofillHints="a,b,c"
-            app:layout_constraintBottom_toBottomOf="@+id/ara_et_recurrence_number"
+            app:layout_constraintBottom_toTopOf="@id/ara_hz_divider"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/ara_et_recurrence_number" />
+
+        <View
+            android:id="@+id/ara_hz_divider"
+            style="@style/Divider"
+            android:layout_margin="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ara_et_recurrence_number" />
+
 
         <TextView
             android:id="@+id/ara_tv_start_date"
@@ -106,7 +115,17 @@
             android:text="@string/ara_date_default"
             app:layout_constraintBottom_toTopOf="@+id/ara_tv_end_date"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ara_et_recurrence_number" />
+            app:layout_constraintTop_toBottomOf="@id/ara_hz_divider" />
+
+        <ImageView
+            android:id="@+id/ara_iv_start_calendar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:contentDescription="@string/ara_select_date_description"
+            android:src="@drawable/calendar_icon"
+            app:layout_constraintStart_toEndOf="@+id/ara_tv_start_date"
+            app:layout_constraintTop_toBottomOf="@+id/ara_hz_divider" />
 
         <TextView
             android:id="@+id/ara_tv_start_time"
@@ -115,8 +134,18 @@
             android:layout_margin="8dp"
             android:text="@string/ara_time_default"
             app:layout_constraintBottom_toTopOf="@+id/ara_tv_end_time"
+            app:layout_constraintEnd_toStartOf="@+id/ara_iv_start_clock"
+            app:layout_constraintTop_toBottomOf="@+id/ara_hz_divider" />
+
+        <ImageView
+            android:id="@+id/ara_iv_start_clock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:contentDescription="@string/ara_select_date_description"
+            android:src="@drawable/clock_icon"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ara_et_recurrence_number" />
+            app:layout_constraintTop_toBottomOf="@+id/ara_hz_divider" />
 
         <TextView
             android:id="@+id/ara_tv_end_date"
@@ -127,14 +156,34 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ara_tv_start_date" />
 
+        <ImageView
+            android:id="@+id/ara_iv_end_calendar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:contentDescription="@string/ara_select_date_description"
+            android:src="@drawable/calendar_icon"
+            app:layout_constraintStart_toEndOf="@+id/ara_tv_end_date"
+            app:layout_constraintTop_toBottomOf="@+id/ara_iv_start_calendar" />
+
         <TextView
             android:id="@+id/ara_tv_end_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:text="@string/ara_time_default"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/ara_iv_end_clock"
             app:layout_constraintTop_toBottomOf="@+id/ara_tv_start_time" />
+
+        <ImageView
+            android:id="@+id/ara_iv_end_clock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:contentDescription="@string/ara_select_date_description"
+            android:src="@drawable/clock_icon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ara_iv_start_clock" />
 
         <Button
             android:id="@+id/aaa_button_add"
