@@ -23,7 +23,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:clickable="true"
-        android:contentDescription="Add Reminder"
+        android:contentDescription="@string/ma_fab_add_reminder"
         android:focusable="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -33,7 +33,7 @@
         android:id="@+id/deleteButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Delete All"
+        android:text="@string/ma_button_delete_all"
         app:layout_constraintEnd_toEndOf="@+id/Toolbar"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -51,7 +51,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="No Reminders found\nClick + to add a reminder"
+        android:text="@string/ma_tv_no_reminders"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/recyclerView"

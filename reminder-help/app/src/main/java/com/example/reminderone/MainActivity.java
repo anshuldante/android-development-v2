@@ -2,6 +2,7 @@ package com.example.reminderone;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,10 +23,13 @@ public class MainActivity extends AppCompatActivity {
 
         FloatingActionButton addReminderButton = findViewById(R.id.floatingActionButton);
 
-        addReminderButton.setOnClickListener(this::attachDatePicker);
+        addReminderButton.setOnClickListener(v -> startActivity(new Intent(this, AddReminderActivity.class)));
+
+
+//        addReminderButton.setOnClickListener(this::attachDatePicker);
     }
 
-    private void attachTimePicker(View v) {
+    private void attachTimePicker(View view) {
         Calendar currentTime = Calendar.getInstance();
         int hour = currentTime.get(Calendar.HOUR_OF_DAY);
         int minute = currentTime.get(Calendar.MINUTE);
@@ -35,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         tpd.show();
     }
 
-    private void attachDatePicker(View v) {
+    private void attachDatePicker(View view) {
         Calendar currentTime = Calendar.getInstance();
         int year = currentTime.get(Calendar.YEAR);
         int month = currentTime.get(Calendar.MONTH);

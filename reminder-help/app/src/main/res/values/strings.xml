@@ -1,3 +1,26 @@
 <resources>
     <string name="app_name">Reminder One</string>
+
+    <array name="recurrence_type_array">
+        <item>Hour(s)</item>
+        <item>Minute(s)</item>
+        <item>Day(s)</item>
+    </array>
+
+    <!--  Strings for the Main Activity  -->
+    <string name="ma_fab_add_reminder">Add Reminder</string>
+    <string name="ma_button_delete_all">Delete All</string>
+    <string name="ma_tv_no_reminders">No Reminders found\nClick + to add a reminder</string>
+
+    <!--  Strings for the Add Reminder Activity  -->
+    <string name="ara_default_display_date">Today-Tue, 29 Jun</string>
+    <string name="ara_select_date_description">Select Date</string>
+    <string name="ara_hint_reminder_name">Reminder Name</string>
+    <string name="ara_switch_repeat_reminder">Repeat Reminder</string>
+    <string name="ara_label_every">Every</string>
+    <string name="ara_repetition_delay">Repetition delay</string>
+    <string name="ara_date_default">Start Date Tue, 29 Jun</string>
+    <string name="ara_time_default">Start Time Tue, 11:52 AM</string>
+    <string name="aaa_button_reset">RESET</string>
+    <string name="aaa_button_add">ADD</string>
 </resources>
