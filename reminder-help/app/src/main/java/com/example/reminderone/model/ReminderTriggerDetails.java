@@ -12,12 +12,18 @@ public class ReminderTriggerDetails {
     private Date createdDate;
     private Date modifiedDate;
 
-    private ReminderTriggerDetails(String id, String reminderId, Date triggerDateTime, Date createdDate, Date modifiedDate) {
+    public ReminderTriggerDetails() {
+        this.reminderId = UUID.randomUUID().toString();
+        this.triggerDateTime = new Date();
+        this.createdDate = new Date();
+        this.modifiedDate = new Date();
+    }
+
+    private ReminderTriggerDetails(String id, String reminderId, Date triggerDateTime) {
+        this();
         this.id = id;
         this.reminderId = reminderId;
         this.triggerDateTime = triggerDateTime;
-        this.createdDate = createdDate;
-        this.modifiedDate = modifiedDate;
     }
 
     public String getId() {
@@ -58,51 +64,5 @@ public class ReminderTriggerDetails {
 
     public void setModifiedDate(Date modifiedDate) {
         this.modifiedDate = modifiedDate;
-    }
-
-    public Builder builder() {
-        return new Builder();
-    }
-
-    private static class Builder {
-
-
-        private String id;
-        private String reminderId;
-        private Date triggerDateTime;
-
-        private Date createdDate;
-        private Date modifiedDate;
-
-        public Builder() {
-            this.reminderId = UUID.randomUUID().toString();
-            this.createdDate = new Date();
-            this.modifiedDate = new Date();
-        }
-
-        public Builder id(String id) {
-            this.id = id;
-            return this;
-        }
-
-        public Builder reminderId(String reminderId) {
-            this.reminderId = reminderId;
-            return this;
-        }
-
-        public Builder triggerDateTime(Date triggerDateTime) {
-            this.triggerDateTime = triggerDateTime;
-            return this;
-        }
-
-        public Builder createdDate(Date createdDate) {
-            this.createdDate = createdDate;
-            return this;
-        }
-
-        public Builder modifiedDate(Date modifiedDate) {
-            this.modifiedDate = modifiedDate;
-            return this;
-        }
     }
 }

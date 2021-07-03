@@ -20,8 +20,8 @@
         <item name="android:background">?android:attr/listDivider</item>
     </style>
 
-
     <style name="MyDatePicker" parent="android:Widget.Material.DatePicker">
         <item name="android:datePickerMode">calendar</item>
     </style>
+
 </resources>

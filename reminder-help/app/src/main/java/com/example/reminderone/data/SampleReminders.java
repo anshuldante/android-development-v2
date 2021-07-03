@@ -8,13 +8,20 @@ import java.util.List;
 public class SampleReminders {
 
     public static List<ReminderDetails> getSampleReminderList() {
-        List<ReminderDetails> list = new ArrayList<>(5);
+        List<ReminderDetails> list = new ArrayList<>(10);
 
-        list.add(ReminderDetails.builder().name("One").startDateYear(2021).startDateMonth(7).startDateDay(1).startTimeHour(10).startTimeMinute(30).build());
-        list.add(ReminderDetails.builder().name("Two").startDateYear(2021).startDateMonth(7).startDateDay(2).startTimeHour(1).startTimeMinute(30).build());
-        list.add(ReminderDetails.builder().name("Three").startDateYear(2021).startDateMonth(7).startDateDay(3).startTimeHour(12).startTimeMinute(30).build());
-        list.add(ReminderDetails.builder().name("Four").startDateYear(2021).startDateMonth(7).startDateDay(4).startTimeHour(13).startTimeMinute(30).build());
-        list.add(ReminderDetails.builder().name("Five").startDateYear(2021).startDateMonth(7).startDateDay(5).startTimeHour(14).startTimeMinute(30).build());
+        list.add(new ReminderDetails("One"));
+        list.add(new ReminderDetails("Two"));
+        list.add(new ReminderDetails("Three"));
+        list.add(new ReminderDetails("Four"));
+        list.add(new ReminderDetails("Five"));
+
+        list.add(new ReminderDetails("Six"));
+        list.add(new ReminderDetails("Seven"));
+        list.add(new ReminderDetails("Eight"));
+        list.add(new ReminderDetails("Nine"));
+        list.add(new ReminderDetails("Ten"));
+
         return list;
     }
 }
