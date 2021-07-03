@@ -17,6 +17,7 @@ import android.widget.TimePicker;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.reminderone.listener.RecurrenceDelayChangedListener;
 import com.example.reminderone.listener.RecurrenceTypeListener;
@@ -34,7 +35,9 @@ import static java.util.Calendar.YEAR;
 
 public class AddReminderActivity extends AppCompatActivity {
 
-    ArrayAdapter<CharSequence> spinnerAdapter;
+    private ConstraintLayout recurrenceDetailsCl;
+    private ReminderDetails referenceReminderDetails;
+    private ArrayAdapter<CharSequence> spinnerAdapter;
     private ReminderDetails reminderDetails;
     private Spinner recurrenceTypeSpinner;
     private SwitchCompat recurrenceSwitch;
@@ -53,7 +56,9 @@ public class AddReminderActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_reminder);
 
-        reminderDetails = new ReminderDetails();
+        referenceReminderDetails = new ReminderDetails();
+        reminderDetails = new ReminderDetails(referenceReminderDetails);
+
         initComponentMappings();
         initPrimaryComponents();
         initRecurrenceComponents();
@@ -64,6 +69,7 @@ public class AddReminderActivity extends AppCompatActivity {
                 R.array.recurrence_type_array, android.R.layout.simple_spinner_item);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         recurrenceTypeSpinner = findViewById(R.id.ara_sn_recurrence_type);
+        recurrenceDetailsCl = findViewById(R.id.ara_cl_recurrence_delay);
         recurrenceDelayEt = findViewById(R.id.ara_et_recurrence_number);
         recurrenceSwitch = findViewById(R.id.ara_sc_recurring_reminder);
         startDateTextView = findViewById(R.id.ara_display_date);
@@ -107,21 +113,22 @@ public class AddReminderActivity extends AppCompatActivity {
     private void initStartDateComponents() {
         initStartDateView();
         Calendar startDateTime = reminderDetails.getStartDateTime();
-        startDateImageView.setOnClickListener(view -> attachDatePickerDialog(startDateTime));
+        startDateImageView.setOnClickListener(view -> attachDatePickerDialog(startDateTime, this::initStartDateView));
     }
 
-    private void attachDatePickerDialog(Calendar dateTime) {
+    private void attachDatePickerDialog(Calendar dateTime, Runnable runnable) {
         DatePickerDialog dpd = new DatePickerDialog(this, (view, year, month, dayOfMonth) ->
-                dateSetListener(view, dateTime), dateTime.get(YEAR), dateTime.get(MONTH), dateTime.get(DATE));
+                dateSetListener(view, runnable, dateTime), dateTime.get(YEAR), dateTime.get(MONTH), dateTime.get(DATE));
         dpd.show();
     }
 
-    private void dateSetListener(DatePicker view, Calendar dateTime) {
+    private void dateSetListener(DatePicker view, Runnable runnable, Calendar dateTime) {
         Log.i("View to Date: ", view.getDayOfMonth() + "/" + (view.getMonth() + 1) + "/" + view.getYear());
 
         dateTime.set(YEAR, view.getYear());
         dateTime.set(MONTH, view.getMonth());
         dateTime.set(DATE, view.getDayOfMonth());
+        runnable.run();
     }
 
     private void initReminderNameComponents() {
@@ -131,8 +138,13 @@ public class AddReminderActivity extends AppCompatActivity {
 
     private void initRecurrenceSwitchListener() {
         initRecurrenceSwitchView();
-        recurrenceSwitch.setOnCheckedChangeListener((buttonView, isChecked) ->
-                findViewById(R.id.ara_cl_recurrence_delay).setVisibility(isChecked ? View.VISIBLE : View.GONE));
+        recurrenceSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            recurrenceDetailsCl.setVisibility(isChecked ? View.VISIBLE : View.GONE);
+            if (!isChecked) {
+                reminderDetails.setRecurrenceDelay(null);
+                initRecurrenceDelayView();
+            }
+        });
     }
 
     private void initSaveButton() {
@@ -148,7 +160,9 @@ public class AddReminderActivity extends AppCompatActivity {
     }
 
     private void onResetButtonClickListener(View v) {
-        Log.i("Resetting Reminder: ", reminderDetails.toString());
+        Log.i("Resetting Reminder from: ", reminderDetails.toString());
+        resetToInitialValues();
+        Log.i("Reset Reminder to: ", reminderDetails.toString());
     }
 
     private void initRecurrenceTypeSpinner() {
@@ -166,29 +180,30 @@ public class AddReminderActivity extends AppCompatActivity {
         initEndDateView();
         ImageView endDateImageView = findViewById(R.id.ara_iv_end_calendar);
         endDateImageView.setOnClickListener(
-                view -> attachDatePickerDialog(reminderDetails.getEndDateTime()));
+                view -> attachDatePickerDialog(reminderDetails.getEndDateTime(), this::initEndDateView));
     }
 
     private void initEndTimeComponents() {
         initEndTimeView();
         ImageView endTimeImageView = findViewById(R.id.ara_iv_end_clock);
         endTimeImageView.setOnClickListener(
-                view -> attachTimePickerDialog(reminderDetails.getEndDateTime()));
+                view -> attachTimePickerDialog(reminderDetails.getEndDateTime(), this::initEndTimeView));
     }
 
-    private void attachTimePickerDialog(Calendar dateTime) {
+    private void attachTimePickerDialog(Calendar dateTime, Runnable runnable) {
         TimePickerDialog tpd = new TimePickerDialog(this, android.R.style.Theme_Holo_Light_Dialog_NoActionBar,
-                ((view, hourOfDay, minute) -> timeSetListener(view, dateTime)),
+                ((view, hourOfDay, minute) -> timeSetListener(view, dateTime, runnable)),
                 dateTime.get(HOUR_OF_DAY), dateTime.get(MINUTE), true);
         tpd.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         tpd.show();
     }
 
-    private void timeSetListener(TimePicker view, Calendar dateTime) {
+    private void timeSetListener(TimePicker view, Calendar dateTime, Runnable runnable) {
         Log.i("View to Time: ", dateTime.get(HOUR) + ":" + dateTime.get(MINUTE));
 
         dateTime.set(HOUR_OF_DAY, view.getHour());
         dateTime.set(MINUTE, view.getMinute());
+        runnable.run();
     }
 
     private void initStartTimeView() {
@@ -222,9 +237,7 @@ public class AddReminderActivity extends AppCompatActivity {
     private void initRecurrenceDelayView() {
         Integer recurrenceDelay = reminderDetails.getRecurrenceDelay();
         Log.i("Recurrence Delay to View: ", recurrenceDelay != null ? recurrenceDelay.toString() : "is null ");
-        if (recurrenceDelay != null) {
-            recurrenceDelayEt.setText(recurrenceDelay);
-        }
+        recurrenceDelayEt.setText(recurrenceDelay != null ? recurrenceDelay.toString() : null);
     }
 
     private void initEndDateView() {
@@ -238,5 +251,17 @@ public class AddReminderActivity extends AppCompatActivity {
         Calendar dateTime = reminderDetails.getEndDateTime();
         Log.i("End time to view: ", dateTime.get(HOUR_OF_DAY) + ":" + dateTime.get(MINUTE));
         endTimeTextView.setText(getString(R.string.ara_reminder_end_time, dateTime.get(HOUR_OF_DAY), dateTime.get(MINUTE)));
+    }
+
+    private void resetToInitialValues() {
+        reminderDetails = new ReminderDetails(referenceReminderDetails);
+        initStartTimeView();
+        initStartDateView();
+        initReminderNameView();
+        initRecurrenceSwitchView();
+        initRecurrenceTypeView();
+        initRecurrenceDelayView();
+        initEndDateView();
+        initEndTimeView();
     }
 }

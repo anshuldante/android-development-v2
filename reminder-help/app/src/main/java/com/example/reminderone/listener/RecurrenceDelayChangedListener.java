@@ -7,6 +7,8 @@ import android.util.Log;
 import com.example.reminderone.model.ReminderDetails;
 
 public class RecurrenceDelayChangedListener implements TextWatcher {
+    private static final String NUMBER_REGEX = "\\d+";
+
     private final ReminderDetails reminderDetails;
 
     public RecurrenceDelayChangedListener(ReminderDetails reminderDetails) {
@@ -23,9 +25,11 @@ public class RecurrenceDelayChangedListener implements TextWatcher {
 
     @Override
     public void afterTextChanged(Editable s) {
-        if (s != null) {
+        Integer recurrenceDelay = null;
+        if (s != null && s.toString().trim().matches(NUMBER_REGEX)) {
             Log.i("Edit Text to Recurrence Delay: ", s.toString());
-            reminderDetails.setRecurrenceDelay(Integer.parseInt(s.toString()));
+            recurrenceDelay = Integer.parseInt(s.toString());
         }
+        reminderDetails.setRecurrenceDelay(recurrenceDelay);
     }
 }

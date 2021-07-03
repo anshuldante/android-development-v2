@@ -42,6 +42,18 @@ public class ReminderDetails {
         this.endDateTime = endDateTime;
     }
 
+    public ReminderDetails(ReminderDetails reminderDetails) {
+        this.id = reminderDetails.getId();
+        this.active = reminderDetails.isActive();
+        this.name = reminderDetails.getName();
+        this.startDateTime = reminderDetails.getStartDateTime();
+        this.recurrenceDelay = reminderDetails.getRecurrenceDelay();
+        this.recurrenceType = reminderDetails.getRecurrenceType();
+        this.endDateTime = reminderDetails.getEndDateTime();
+        this.createdDate = reminderDetails.getCreatedDate();
+        this.modifiedDate = reminderDetails.getModifiedDate();
+    }
+
     public String getId() {
         return id;
     }

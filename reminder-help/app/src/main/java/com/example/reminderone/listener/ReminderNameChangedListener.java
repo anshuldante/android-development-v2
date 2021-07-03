@@ -23,9 +23,11 @@ public class ReminderNameChangedListener implements TextWatcher {
 
     @Override
     public void afterTextChanged(Editable s) {
+        String name = null;
         if (s != null) {
             Log.i("Edit Text to name: ", s.toString());
-            reminderDetails.setName(s.toString().trim());
+            name = s.toString().trim();
         }
+        reminderDetails.setName(name);
     }
 }
