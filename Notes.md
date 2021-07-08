@@ -2,12 +2,6 @@
 
 ## Room
 
-https://developer.android.com/training/data-storage/room/prepopulate
-https://medium.com/androiddevelopers/7-steps-to-room-27a5fe5f99b2
-https://medium.com/androiddevelopers/7-pro-tips-for-room-fbadea4bfbd1
-https://medium.com/androiddevelopers/incrementally-migrate-from-sqlite-to-room-66c2f655b377
-https://medium.com/androiddevelopers/room-flow-273acffe5b57
-
 ## Hilt Trials
 
 https://developer.android.com/training/dependency-injection/hilt-android

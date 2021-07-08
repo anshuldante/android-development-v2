@@ -14,6 +14,7 @@ public class MainActivity extends AppCompatActivity {
     List<String> firstNames = Arrays.asList("Anshul", "Atharv", "Vibhuti", "Madhav");
     List<String> lastNames = Arrays.asList("Agrawal", "Bansal");
 
+    AppDatabase db;
     UserDao userDao;
     LibraryDao libraryDao;
 
@@ -22,8 +23,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        AppDatabase db = Room.databaseBuilder(getApplicationContext(),
-                AppDatabase.class, "database-name").build();
+//        AppDatabase db = Room.databaseBuilder(getApplicationContext(),
+//                AppDatabase.class, "sample.db")
+//                .createFromAsset("database/myapp.db")
+////                .createFromFile(new File("mypath"))
+//                .build();
+
+
+        db = Room.databaseBuilder(getApplicationContext(),
+                AppDatabase.class, "sample.db")
+                .createFromAsset("database/myapp.db")
+                .addCallback(new PrePopulateCallback(db))
+                .build();
 
         userDao = db.userDao();
 
@@ -36,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         new Thread(() -> {
             firstNames.forEach(fName -> lastNames.forEach(lName -> {
                 User user = new User(fName, lName);
-                userDao.insertUser(user);
+                userDao.insert(user);
                 libraryDao.insert(new Library(user.id));
             }));
             getAllUsers();

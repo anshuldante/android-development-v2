@@ -10,7 +10,7 @@ public class UserWithPlaylistsAndSongs {
     public User user;
     @Relation(
             entity = Playlist.class,
-            parentColumn = "userId",
+            parentColumn = "id",
             entityColumn = "userCreatorId"
     )
     public List<PlaylistWithSongs> playlists;

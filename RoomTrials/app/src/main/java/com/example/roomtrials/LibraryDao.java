@@ -1,17 +1,13 @@
 package com.example.roomtrials;
 
 import androidx.room.Dao;
-import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Transaction;
 
 import java.util.List;
 
 @Dao
-public interface LibraryDao {
-
-    @Insert
-    void insert(Library library);
+public interface LibraryDao extends BaseDao<Library> {
 
     @Query("Select * from library")
     List<Library> getAll();
