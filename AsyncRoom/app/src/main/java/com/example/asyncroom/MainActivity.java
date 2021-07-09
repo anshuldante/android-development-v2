@@ -14,38 +14,38 @@ import com.example.asyncroom.data.UserDao;
 import com.example.asyncroom.entity.User;
 
 import java.util.Objects;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 import io.reactivex.Scheduler;
-import io.reactivex.Single;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String NUMBER_REGEX = "\\d+";
 
-    RxTrialDb db;
-    UserDao userDao;
-    Scheduler scheduler;
-    TextView userDetailsTextView;
-    EditText firstNameEt;
-    EditText lastNameEt;
-    EditText idEt;
-    Button addUserBt;
-    Button deleteUserBt;
+    private UserDao userDao;
+    private Scheduler scheduler;
+    private TextView userDetailsTextView;
+    private EditText firstNameEt;
+    private EditText lastNameEt;
+    private EditText idEt;
+    private final CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private ExecutorService executorService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        db = Room.databaseBuilder(getApplicationContext(), RxTrialDb.class, "Rx-Java-DB").build();
+        RxTrialDb db = Room.databaseBuilder(getApplicationContext(), RxTrialDb.class, "Rx-Java-DB").build();
         userDao = db.userDao();
-        scheduler = Schedulers.from(Executors.newFixedThreadPool(5));
-
+        executorService = Executors.newFixedThreadPool(5);
+        scheduler = Schedulers.from(executorService);
         initViews();
-
         getAllUsers();
     }
 
@@ -56,45 +56,65 @@ public class MainActivity extends AppCompatActivity {
         lastNameEt = findViewById(R.id.am_et_last_name);
         idEt = findViewById(R.id.am_et_user_id);
 
-        addUserBt = findViewById(R.id.am_bt_add_user);
-        deleteUserBt = findViewById(R.id.am_bt_delete_user);
+        Button addUserBt = findViewById(R.id.am_bt_add_user);
+        Button deleteUserBt = findViewById(R.id.am_bt_delete_user);
 
         addUserBt.setOnClickListener(view ->
                 addUser(firstNameEt.getText().toString(), lastNameEt.getText().toString()));
-
         deleteUserBt.setOnClickListener(view -> deleteUser(idEt.getText().toString())
         );
     }
 
     private void addUser(String firstName, String lastName) {
-        Single<Long> insertedSingle = userDao.insert(new User(firstName, lastName));
-        insertedSingle.subscribeOn(scheduler)
-                .subscribe((l) -> Log.i("Users: ", "Inserted User with id: " + l),
-                        (e) -> Log.e("Users: ", "Exception while adding user", e));
+        executorService.submit(() -> {
+            try {
+                userDao.insert(new User(firstName, lastName));
+                Log.i("Users: ", "Inserted User: " + firstName + " " + lastName);
+            } catch (Exception e) {
+                Log.e("Users: ", "Exception while adding user", e);
+            }
+        });
     }
 
     private void deleteUser(String id) {
-
         if (id != null && id.trim().matches(NUMBER_REGEX)) {
-
-            userDao.getUserById(Integer.parseInt(id)).singleElement().subscribeOn(scheduler).subscribe((user -> {
-                Log.i("Users: ", "Found the user: " + user.toString());
-                userDao.delete(user).subscribeOn(scheduler)
-                        .subscribe(integer -> Log.i("Users: ", "Deleted user with id: " + id),
-                                throwable -> Log.e("Users: ", "Exception while deleting user with id: " + id, throwable))
-                        .dispose();
-            }), throwable -> Log.e("Users: ", "User with ID: " + id + " not found", throwable));
+            executorService.submit(() -> {
+                try {
+                    User user = userDao.getUserById(Integer.parseInt(id));
+                    Log.i("Users: ", "Found the user: " + user.toString());
+                    try {
+                        userDao.delete(user);
+                        Log.i("Users: ", "Deleted user with id: " + id);
+                    } catch (Exception e) {
+                        Log.e("Users: ", "Exception while deleting user with id: " + id, e);
+                    }
+                } catch (Exception e) {
+                    Log.e("Users: ", "User with ID: " + id + " not found", e);
+                }
+            });
         } else {
             Log.i("Users: ", "Invalid userId: " + id);
         }
     }
 
     private void getAllUsers() {
-        userDao.getAllUsers().subscribeOn(scheduler).subscribe(users -> {
+        Disposable disposable = userDao.getAllUsers().subscribeOn(scheduler).subscribe(users -> {
                     Log.i("Users: ", "All Users: " + users.toString());
-                    userDetailsTextView.setText(users.stream().map(Objects::toString).collect(Collectors.joining("\n")));
-
+                    runOnUiThread(() -> {
+                        if (users.size() == 0) {
+                            userDetailsTextView.setText("No users!");
+                        } else {
+                            userDetailsTextView.setText(users.stream().map(Objects::toString).collect(Collectors.joining("\n")));
+                        }
+                    });
                 }, throwable -> Log.e("Users: ", "Exception while fetching all users", throwable),
                 () -> Log.i("Users: ", "Finished finding users"));
+        compositeDisposable.add(disposable);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        compositeDisposable.dispose();
     }
 }
