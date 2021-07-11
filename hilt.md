@@ -21,4 +21,4 @@
 | ServiceComponent          | Service                           | @ServiceScoped             | Service.onCreate     | Service.onDestroy     | Application, Service                   |
 
 * Hilt Managed View models must be created via the ViewModelProvider API.
-* ![Annotation Cheatsheet](resources/hilt-cheatsheet.svg)
+* ![Annotation Cheatsheet](resources/hilt-cheatsheet.png)
