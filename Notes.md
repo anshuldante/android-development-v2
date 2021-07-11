@@ -5,10 +5,7 @@
 ## Hilt Trials
 
 https://developer.android.com/training/dependency-injection/hilt-android
-https://developer.android.com/codelabs/android-hilt#0
-https://medium.com/androiddevelopers/dependency-injection-on-android-with-hilt-67b6031e62d
-https://medium.com/androiddevelopers/hilt-is-stable-easier-dependency-injection-on-android-53aca3f38b9c
-https://github.com/commonsguy/cw-androidarch/tree/FINAL
+https://dagger.dev/hilt/quick-start
 
 ## Jetpack
 
