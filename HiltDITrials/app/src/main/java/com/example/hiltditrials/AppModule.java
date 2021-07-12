@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.example.hiltditrials.dependency.LogPrinter;
 import com.example.hiltditrials.dependency.Printer;
+import com.example.hiltditrials.dependency.TextMaker;
 import com.example.hiltditrials.dependency.ToastPrinter;
 
 import javax.inject.Named;
@@ -20,13 +21,13 @@ public class AppModule {
 
     @Provides
     @Named("log")
-    public Printer getLogPrinter(LogPrinter logPrinter) {
-        return new LogPrinter();
+    public Printer getLogPrinter(TextMaker textMaker) {
+        return new LogPrinter(textMaker);
     }
 
     @Provides
     @Named("toast")
-    public Printer getToastPrinter(@ApplicationContext Context context) {
-        return new ToastPrinter(context);
+    public Printer getToastPrinter(TextMaker textMaker, @ApplicationContext Context context) {
+        return new ToastPrinter(textMaker, context);
     }
 }

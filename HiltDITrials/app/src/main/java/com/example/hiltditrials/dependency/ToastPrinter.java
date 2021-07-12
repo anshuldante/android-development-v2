@@ -3,19 +3,17 @@ package com.example.hiltditrials.dependency;
 import android.content.Context;
 import android.widget.Toast;
 
-import javax.inject.Inject;
-
-public class ToastPrinter implements Printer {
+public class ToastPrinter extends Printer {
 
     private final Context context;
 
-    @Inject
-    public ToastPrinter(Context context) {
+    public ToastPrinter(TextMaker textMaker, Context context) {
+        super(textMaker);
         this.context = context;
     }
 
     @Override
-    public void print(String str) {
-        Toast.makeText(context, str, Toast.LENGTH_LONG).show();
+    public void print() {
+        Toast.makeText(context, getText(), Toast.LENGTH_LONG).show();
     }
 }
