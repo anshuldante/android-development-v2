@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Service Trials</string>
+    <string name="downloading">Downloading</string>
+    <string name="exception">Error While Downloading!</string>
+    <string name="download_complete">Download Completed</string>
+    <string name="fun">Learning is fun :)</string>
+    <string name="stop_background">Stop Background!</string>
+    <string name="start_background">Start Background!</string>
+    <string name="download">Download!</string>
+    <string name="notification_title">My First Notification</string>
+    <string name="notification_message">First trial notification to download file.</string>
+    <string name="ticker_text">My Ticker Text</string>
+</resources>
