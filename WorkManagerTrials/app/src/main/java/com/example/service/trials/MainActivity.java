@@ -20,6 +20,12 @@ public class MainActivity extends AppCompatActivity {
     //    foregroundServiceWithFragment();
   }
 
+  @Override
+  protected void onDestroy() {
+    super.onDestroy();
+    stopService(serviceIntent);
+  }
+
   private void foregroundServiceWithFragment() {
     if (getSupportFragmentManager().findFragmentById(android.R.id.content) == null) {
       getSupportFragmentManager()
@@ -33,10 +39,5 @@ public class MainActivity extends AppCompatActivity {
     serviceIntent = new Intent(this, ForegroundService.class);
     Log.i("Foreground Service: ", "Creating Foreground Service Intent");
     startService(serviceIntent);
-  }
-
-  private void stopForegroundService() {
-    Log.i("Foreground Service: ", "Stopping Foreground service");
-    stopService(serviceIntent);
   }
 }
