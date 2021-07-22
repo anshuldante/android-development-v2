@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Foreground Service</string>
+    <string name="notification_title">My First Notification</string>
+    <string name="notification_message">First trial notification on a foreground service.</string>
+    <string name="stop_button_text">Stop Notification</string>
+    <string name="start_button_text">Start Notification</string>
+    <string name="ticker_text">Foreground Service Sample</string>
+</resources>
