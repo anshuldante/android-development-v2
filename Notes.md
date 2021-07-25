@@ -1,12 +1,5 @@
 # Helpful links
 
-## Room
-
-## Hilt Trials
-
-https://developer.android.com/training/dependency-injection/hilt-android
-https://dagger.dev/hilt/quick-start
-
 ## Jetpack
 
 https://developer.android.com/jetpack
