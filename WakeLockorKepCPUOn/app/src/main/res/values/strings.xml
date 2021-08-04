@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Wake Lock or Kep CPU On</string>
+    <string name="acquire_wake_lock">Acquire Wake Lock</string>
+    <string name="release_wake_lock">Release Wake Lock</string>
+    <string name="start_task">Start Task</string>
+</resources>
