@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Screen On-Off Trial</string>
+    <string name="screen_on">Screen On!</string>
+    <string name="screen_off">Screen Off!</string>
+</resources>
