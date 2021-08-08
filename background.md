@@ -37,3 +37,10 @@ public void onClick(View v) {
     }).start();
 }
 ```
+
+## Doze
+
+* Standard AlarmManager alarms (including setExact() and setWindow()) are deferred to the next maintenance window.
+* If you need to set alarms that fire while in Doze, use setAndAllowWhileIdle() or setExactAndAllowWhileIdle().
+* Alarms set with setAlarmClock() continue to fire normally — the system exits Doze shortly before those alarms fire.
+* The system doesn't perform Wi-Fi scans, and doesn't allow sync adapters a JobScheduler.

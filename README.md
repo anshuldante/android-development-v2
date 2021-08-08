@@ -10,3 +10,10 @@
 * **admin-portal**: invoicing and payment receiving
 * **moneywallet**: wallet and budgeting
 * **budget-watch**: wallet and budgeting
+
+## Reading
+
+* [Firebase Cloud Messaging](https://firebase.google.com/docs/cloud-messaging)
+* [Background Execution Limitations](https://developer.android.com/about/versions/oreo/background#services)
+* [Power Limitations](https://developer.android.com/topic/performance/power/power-details)
+* [Excessive wake ups](https://developer.android.com/topic/performance/vitals/wakeup)

@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
     //    alarmInTenSeconds();
     //    inexactAlarmRepeatedEveryMinute();
     //    alarmEveryAlternateMinute();
-    enableBroadcastReceiver();
+    //    enableBroadcastReceiver();
   }
 
   private void startForegroundService() {
