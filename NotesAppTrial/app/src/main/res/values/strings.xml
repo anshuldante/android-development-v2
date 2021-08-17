@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Notes App Trial</string>
+    <string name="_sample_priority">1</string>
+    <string name="sample_title">I\'m a very big title</string>
+    <string name="sample_description">And I\'m the corresponding description</string>
+    <string name="add_note">Add Note</string>
+</resources>
