@@ -2,7 +2,7 @@
 
 ## Background Tasks
 
-* ![Task type decision tree](/android/android-development-v2/resources/task-category-tree.png)
+* ![Task type decision tree](resources/task-category-tree.png)
 * Immediate tasks => WorkManager or ForegroundServices.
 * Deferred tasks => WorkManager
 * Exact tasks => AlarmManager
