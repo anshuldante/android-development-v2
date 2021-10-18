@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     alarmIntent = getActivity(this, REQUEST_CODE, serviceIntent, FLAG_IMMUTABLE);
 
     //    startForegroundService();
-    //    alarmInTenSeconds();
+    alarmInTenSeconds();
     //    inexactAlarmRepeatedEveryMinute();
     //    alarmEveryAlternateMinute();
     //    enableBroadcastReceiver();

@@ -1,5 +1,16 @@
 # Android Development V2
 
+## Notifications
+
+![Notification Anatomy](resources/notification-callouts.png)
+
+1. **Small icon**: This is required and set with setSmallIcon().
+2. **App name**: This is provided by the system.
+3. **Time stamp**: This is provided by the system but you can override with setWhen() or hide it with setShowWhen(false).
+4. **Large icon**: This is optional (usually used only for contact photos; do not use it for your app icon) and set with setLargeIcon().
+5. **Title**: This is optional and set with setContentTitle().
+6. **Text**: This is optional and set with setContentText().
+
 ## Background Tasks
 
 ![Task type decision tree](resources/task-category-tree.png)

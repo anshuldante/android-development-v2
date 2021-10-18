@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Notification One</string>
+    <string name="channel_name">com.test.notificationone</string>
+    <string name="channel_description">Testing out notifications</string>
+    <string name="service_text">Invoked Alarm Service</string>
+    <string name="snooze">Snooze</string>
+    <string name="sample_important_text">Sample Important text</string>
+</resources>
