@@ -6,18 +6,21 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.core.app.Person;
 
 public class MainActivity extends AppCompatActivity {
 
   private static final String CHANNEL_ID = "com.test.notificationone";
   public static final String LARGE_MSG =
-      "Much more detailed content that can have buttons and images etc.\n containing a new line to test stuff out properly";
+      "Much more detailed content <b>that can have buttons and images etc.</b>\n containing a new line to test stuff out properly";
   public static final String SHORT_MSG = "Primary message with high level details";
   private static final String ACTION_SNOOZE = "Snooze";
 
@@ -28,6 +31,29 @@ public class MainActivity extends AppCompatActivity {
 
     NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
     createNotificationChannel();
+
+    NotificationCompat.Builder notificationTrialBuilder = trialNotification();
+
+    NotificationCompat.Builder highPriorityNotificationBuilder = highPriorityNotification();
+
+    notificationManager.notify(1, highPriorityNotificationBuilder.build());
+  }
+
+  private NotificationCompat.Builder highPriorityNotification() {
+    Intent fullScreenIntent = new Intent(this, FullscreenActivity.class);
+    PendingIntent fullScreenPendingIntent =
+        PendingIntent.getActivity(this, 0, fullScreenIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+    return new NotificationCompat.Builder(this, CHANNEL_ID)
+        .setSmallIcon(R.drawable.ic_baseline_snooze_24)
+        .setContentTitle("Incoming call")
+        .setContentText("(919) 555-1234")
+        .setPriority(NotificationCompat.PRIORITY_HIGH)
+        .setCategory(NotificationCompat.CATEGORY_CALL)
+        .setFullScreenIntent(fullScreenPendingIntent, true);
+  }
+
+  private NotificationCompat.Builder trialNotification() {
     NotificationCompat.Builder builder = createNotification();
 
     attachActivityIntent(builder);
@@ -35,7 +61,50 @@ public class MainActivity extends AppCompatActivity {
     attachSnoozeAction(builder);
     attachDismissAction(builder);
     attachFullscreenIntent(builder);
-    notificationManager.notify(1, builder.build());
+
+    attachLargeImageAndIcon(builder);
+
+    addMultipleLines(builder);
+
+    addConversation(builder);
+    return builder;
+  }
+
+  private void addConversation(NotificationCompat.Builder builder) {
+    NotificationCompat.MessagingStyle.Message message1 =
+        new NotificationCompat.MessagingStyle.Message(
+            "Hi Vibhuti",
+            System.currentTimeMillis(),
+            new Person.Builder().setName("Anshul").build());
+
+    NotificationCompat.MessagingStyle.Message message2 =
+        new NotificationCompat.MessagingStyle.Message(
+            "Hi Anshul",
+            System.currentTimeMillis(),
+            new Person.Builder().setName("Vibhuti").build());
+
+    builder.setStyle(
+        new NotificationCompat.MessagingStyle(new Person.Builder().setName("Anshul").build())
+            .addMessage(message1)
+            .addMessage(message2)
+            .setConversationTitle("Sample chat"));
+  }
+
+  private void addMultipleLines(NotificationCompat.Builder builder) {
+    builder.setStyle(
+        new NotificationCompat.InboxStyle()
+            .addLine("Message for line-1")
+            .addLine("Message for line-2"));
+  }
+
+  private void attachLargeImageAndIcon(NotificationCompat.Builder builder) {
+    Bitmap imageIcon =
+        BitmapFactory.decodeStream(this.getResources().openRawResource(R.raw.infinite));
+
+    builder
+        .setLargeIcon(imageIcon)
+        .setStyle(
+            new NotificationCompat.BigPictureStyle().bigPicture(imageIcon).bigLargeIcon(null));
   }
 
   private void attachFullscreenIntent(NotificationCompat.Builder builder) {
