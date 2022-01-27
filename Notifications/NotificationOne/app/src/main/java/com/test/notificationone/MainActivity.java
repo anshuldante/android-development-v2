@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
     NotificationCompat.Builder highPriorityNotificationBuilder = highPriorityNotification();
 
-    notificationManager.notify(1, highPriorityNotificationBuilder.build());
+    notificationManager.notify(1, notificationTrialBuilder.build());
   }
 
   private NotificationCompat.Builder highPriorityNotification() {

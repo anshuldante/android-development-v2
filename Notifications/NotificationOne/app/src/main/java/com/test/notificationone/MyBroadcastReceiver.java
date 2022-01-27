@@ -46,7 +46,7 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
             () -> {
               Log.i(TAG, "Will sleep and trigger another notification.");
               try {
-                Thread.sleep(2000l);
+                Thread.sleep(2000L);
               } catch (InterruptedException e) {
                 e.printStackTrace();
               }
